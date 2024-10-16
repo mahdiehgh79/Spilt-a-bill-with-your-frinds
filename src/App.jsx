@@ -1,3 +1,4 @@
+import {useState} from "react"
 const initialFriends = [
   {
     id: 118836,
@@ -150,10 +151,10 @@ const FormSplitBill = ({ selectedFrind }) => {
       <h2>split a bill with x</h2>
       <label>💰 Bill value</label>
       <input type="text" value={bill}
-        onChange={(e) => setBill(Number(e.target.value))/>
+        onChange={(e) => setBill(Number(e.target.value))}/>
       <label>👩‍🦲 your expense</label>
       <input type="text" value={paidByUser}
-        onChange={(e) => setPaidByUser(Number(e.target.value))/>
+        onChange={(e) => setPaidByUser(Number(e.target.value))}/>
       <label>👩‍❤️‍💋‍👩 Xs expense</label>
       <input type="text" disabled />
 
