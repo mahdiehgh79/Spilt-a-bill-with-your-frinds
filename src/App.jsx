@@ -24,6 +24,15 @@ function App() {
 
   const [frinds, setFrinds] = useState(initialFriends);
 
+  const [selectedFrind, setSelectedFrind] = useState(null);
+
+  const handeleselection = (frind) => {
+    setSelectedFrind((curselected) =>
+      curselected?.id === frind.id ? null : frind
+    );
+    setShowaddfrindes(false);
+  };
+
   const handleshowaddfrinds = (newfrind) => {
     setFrinds((frinds) => [...frinds, newfrind]);
     handeladdfrinds(false);
@@ -35,32 +44,35 @@ function App() {
   return (
     <div className="app">
       <div className="sidebar">
-        <FrindsList frinds={frinds}/>
+        <FrindsList frinds={frinds} onselection={handeleselection}
+          selectedFrind={selectedFrind}/>
        {showaddfrinds && <FormAddFrind onaddfrind={handleshowaddfrinds} />}
         <Button onClick={handeladdfrinds}>
           {showaddfrinds ? "close" : "Add frind"}
         </Button>
       </div>
-
-      <FormSplitBill />
+      {selectedFrind && <FormSplitBill selectedFrind={selectedFrind} />}
     </div>
   );
 }
 
-const FrindsList = ({ frinds }) => {
+const FrindsList = ({ frinds, onselection , selectedFrind }) => {
   
   return (
     <ul>
       {frinds.map((frind) => (
-        <Frind frind={frind} key={frind.id} />
+        <Frind frind={frind} key={frind.id}  onselection={onselection}
+          selectedFrind={selectedFrind} />
       ))}
     </ul>
   );
 };
 
-const Frind = ({ frind }) => {
+const Frind = ({ frind, onselection, selectedFrind }) => {
+  const isSelected = selectedFrind?.id === frind.id;
+
   return (
-    <li>
+    <li  className={isSelected ? "selected" : ""}>
       <img src={frind.image} alt={frind.name} />
       <h3>{frind.name}</h3>
 
@@ -77,7 +89,7 @@ const Frind = ({ frind }) => {
         </p>
       )}
       {frind.balance === 0 && <p>you and {frind.name} are even</p>}
-      <Button>Select</Button>
+      <Button onClick={() => onselection(frind)}>{isSelected ? "close" : "select"}</Button>
     </li>
   );
 };
@@ -128,21 +140,28 @@ const FormAddFrind = ({ onaddfrind }) => {
   );
 };
 
-const FormSplitBill = () => {
+const FormSplitBill = ({ selectedFrind }) => {
+  const [bill, setBill] = useState("");
+  const [paidByUser, setPaidByUser] = useState("");
+  const [whoIsPaying, setWhoIsPaying] = useState("user");
+
   return (
     <form className="form-split-bill">
       <h2>split a bill with x</h2>
       <label>💰 Bill value</label>
-      <input type="text" />
+      <input type="text" value={bill}
+        onChange={(e) => setBill(Number(e.target.value))/>
       <label>👩‍🦲 your expense</label>
-      <input type="text" />
+      <input type="text" value={paidByUser}
+        onChange={(e) => setPaidByUser(Number(e.target.value))/>
       <label>👩‍❤️‍💋‍👩 Xs expense</label>
       <input type="text" disabled />
 
       <label>🤑 who is paying the bill</label>
-      <select>
+      <select  value={whoIsPaying}
+        onChange={(e) => setWhoIsPaying(e.target.value)}>
         <option value="user">You</option>
-        <option value="user">X</option>
+        <option value="frind">X</option>
       </select>
 
       <Button>Split bill</Button>
