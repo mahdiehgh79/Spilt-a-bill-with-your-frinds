@@ -144,6 +144,8 @@ const FormAddFrind = ({ onaddfrind }) => {
 const FormSplitBill = ({ selectedFrind }) => {
   const [bill, setBill] = useState("");
   const [paidByUser, setPaidByUser] = useState("");
+  const paiedByFrind = bill ? bill - paidByUser : "";
+
   const [whoIsPaying, setWhoIsPaying] = useState("user");
 
   return (
@@ -154,7 +156,7 @@ const FormSplitBill = ({ selectedFrind }) => {
         onChange={(e) => setBill(Number(e.target.value))}/>
       <label>👩‍🦲 your expense</label>
       <input type="text" value={paidByUser}
-        onChange={(e) => setPaidByUser(Number(e.target.value))}/>
+        onChange={(e) => setPaidByUser(Number(e.target.value) > bill ? paidByUser : Number(e.target.value))}/>
       <label>👩‍❤️‍💋‍👩 Xs expense</label>
       <input type="text" disabled />
 
