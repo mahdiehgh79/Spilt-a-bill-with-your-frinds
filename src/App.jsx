@@ -64,7 +64,7 @@ function App() {
           {showaddfrinds ? "close" : "Add frind"}
         </Button>
       </div>
-      {selectedFrind && <FormSplitBill selectedFrind={selectedFrind} onSplitbill={handleSpillbill}/>}
+      {selectedFrind && <FormSplitBill selectedFrind={selectedFrind} onSplitbill={handleSpillbill} key={selectedFrind.id}/>}
     </div>
   );
 }
